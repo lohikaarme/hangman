@@ -2,17 +2,19 @@
 
 # Hangman game logic
 class Game
-  attr_reader :game, :key_word, :key_length, :word_select
+  attr_accessor :game
+  attr_reader :key_word, :key_length, :guess
 
   def initialize
     @game = true
     @key_word = ''
     @key_length = 0
+    @guess = []
     word_select
     # game_setup
   end
 
-  def self.word_select
+  def word_select
     words = []
     file = File.open('google-10000-english-no-swears.txt', 'r')
     file.readlines.each do |line|
@@ -23,11 +25,16 @@ class Game
     @key_length = @key_word.length
   end
 
-  def self.print_test
-    puts @key_word
-    puts @key_length
+  def player_guess
+    guess = ''
+    guessing = true
+    while guessing
+      puts 'Please select a character'
+      guess = gets.chomp.downcase
+      redo unless guess.match?(/^[a-z]{1}$/)
+      guessing = false
+    end
+    @guess << guess
+    p @guess
   end
 end
-
-Game.word_select
-Game.print_test
