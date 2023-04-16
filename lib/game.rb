@@ -9,6 +9,7 @@ class Game
 
   def initialize
     @game = true
+    @win = false
     @key_word = ''
     @key_letters = []
     @key_length = 0
@@ -20,14 +21,14 @@ class Game
 
   def run
     # option to load game or start new game
+    key_render(@key_letters, @guess)
     player_guess(@guess)
     word_check(@guess, @key_letters)
-    # win condition check
+    # win/loss message
     guess_count(@guess, @max_guesses)
-    key_render(@key_letters, @guess)
-
-    p @guess
-    p @key_word
+    end_game
+    # p @guess
+    # p @key_word
   end
 
   def word_select
@@ -57,12 +58,10 @@ class Game
 
   def word_check(guessed, key)
     remaining = (key - guessed)
-    if remaining.empty?
-      p true
-      @game = false
-    else
-      p remaining.length
-    end
+    return unless remaining.empty?
+
+    @game = false
+    @win = true
   end
 
   def guess_count(guesses, max_guesses)
@@ -79,6 +78,18 @@ class Game
         '_'
       end
     end
-    p viewer.join
+    puts
+    puts viewer.join(' ')
+    puts "Guesses: #{guess.join(' ')}"
+  end
+
+  def end_game
+    return if @game == true
+
+    if @win == true
+      puts "Congratulations, you win! The correct word was #{@key_word}"
+    else
+      puts "The key word was #{@key_word}, better luck next time!"
+    end
   end
 end
