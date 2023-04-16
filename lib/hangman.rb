@@ -22,6 +22,6 @@ end
 def play_again
   # get prompt
 end
-  
+
 new_game
 # game_start

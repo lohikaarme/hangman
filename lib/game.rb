@@ -13,18 +13,19 @@ class Game
     @key_letters = []
     @key_length = 0
     @guess = []
+    @max_guesses = 10
     word_select
     # game_setup
   end
-  
+
   def run
     # option to load game or start new game
     player_guess(@guess)
     word_check(@guess, @key_letters)
-    # logic check of player guess
     # win condition check
-    # render update
-    
+    guess_count(@guess, @max_guesses)
+    key_render(@key_letters, @guess)
+
     p @guess
     p @key_word
   end
@@ -48,18 +49,36 @@ class Game
       puts 'Please select a character'
       guess = gets.chomp.downcase
       redo unless guess.match?(/^[a-z]{1}$/)
+      redo if guessed.include?(guess)
       guessing = false
     end
     guessed << guess
   end
-  
+
   def word_check(guessed, key)
     remaining = (key - guessed)
     if remaining.empty?
-      p true #end game
-    else 
+      p true
+      @game = false
+    else
       p remaining.length
     end
   end
-  
+
+  def guess_count(guesses, max_guesses)
+    guess_count = guesses.length
+    @game = false if guess_count >= max_guesses
+    puts "Remaining guesses: #{max_guesses - guess_count}"
+  end
+
+  def key_render(key, guess)
+    viewer = key.map do |k|
+      if guess.include?(k)
+        k
+      else
+        '_'
+      end
+    end
+    p viewer.join
+  end
 end
