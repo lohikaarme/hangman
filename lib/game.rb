@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 require 'pry'
+require_relative 'serial'
 
 # Hangman game logic
 class Game
+  include BasicSerializable
+
   attr_accessor :game
   attr_reader :key_word, :key_length, :guess
 
@@ -27,6 +30,7 @@ class Game
     # win/loss message
     guess_count(@guess, @max_guesses)
     end_game
+    # binding.pry
     # p @guess
     # p @key_word
   end
