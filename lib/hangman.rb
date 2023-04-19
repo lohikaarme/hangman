@@ -6,18 +6,19 @@ require_relative 'game'
 require_relative 'serial'
 
 class Main
-  include BasicSerializable
+
+  attr_accessor :game_obj
 
   def game_start
     # new game or load game
     # binding.pry
     # game.playhile game.game
   end
-
+  
   def new_game
     game_obj = Game.new
     game_obj.run while game_obj.game
-    binding.pry
+    # binding.pry
   end
 
   def load_game

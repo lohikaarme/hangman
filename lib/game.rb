@@ -23,6 +23,8 @@ class Game
   end
 
   def run
+    load_check
+    save_check
     # option to load game or start new game
     key_render(@key_letters, @guess)
     player_guess(@guess)
@@ -96,4 +98,56 @@ class Game
       puts "The key word was #{@key_word}, better luck next time!"
     end
   end
+
+  def save_check
+    choice = ''
+    choosing = true
+    while choosing
+      puts 'Would you like to save your game? (Yes or No)'
+      choices = %w[yes no]
+      choice = gets.chomp.downcase
+      redo unless choices.include?(choice)
+      choosing = false
+    end
+    # binding.pry
+    save_game if choice == 'yes'
+  end
+
+  def load_check
+    choice = ''
+    choosing = true
+    while choosing
+      puts 'Would you like to load your game? (Yes or No)'
+      choices = %w[yes no]
+      choice = gets.chomp.downcase
+      redo unless choices.include?(choice)
+      choosing = false
+    end
+    # binding.pry
+    load_game if choice == 'yes'
+  end
+
+  def serialize
+    obj = {}
+    instance_variables.map do |var|
+      obj[var] = instance_variable_get(var)
+    end.to_json
+  end
+
+  def save_game
+    save_date = serialize
+    tmp = File.open('save_file.json', 'w')
+    tmp.puts save_date
+    tmp.close
+  end
+
+  def load_game
+    obj = JSON.parse(File.read('save_file.json'))
+    p obj
+    obj.keys.each do |key|
+      instance_variable_set(key, obj[key])
+    end
+  end
+
 end
+
