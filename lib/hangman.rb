@@ -6,7 +6,6 @@ require_relative 'game'
 require_relative 'serial'
 
 class Main
-
   attr_accessor :game_obj
 
   def game_start
@@ -14,7 +13,7 @@ class Main
     # binding.pry
     # game.playhile game.game
   end
-  
+
   def new_game
     game_obj = Game.new
     game_obj.run while game_obj.game

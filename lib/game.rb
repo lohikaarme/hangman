@@ -19,11 +19,13 @@ class Game
     @guess = []
     @max_guesses = 10
     word_select
+    @turn = 0
     # game_setup
   end
 
   def run
     load_check
+    @turn += 1
     save_check
     # option to load game or start new game
     key_render(@key_letters, @guess)
@@ -32,7 +34,7 @@ class Game
     # win/loss message
     guess_count(@guess, @max_guesses)
     end_game
-    # binding.pry
+    binding.pry
     # p @guess
     # p @key_word
   end
@@ -114,6 +116,8 @@ class Game
   end
 
   def load_check
+    return if (@turn != 0)
+
     choice = ''
     choosing = true
     while choosing
@@ -123,7 +127,6 @@ class Game
       redo unless choices.include?(choice)
       choosing = false
     end
-    # binding.pry
     load_game if choice == 'yes'
   end
 
@@ -131,7 +134,8 @@ class Game
     obj = {}
     instance_variables.map do |var|
       obj[var] = instance_variable_get(var)
-    end.to_json
+    end
+    JSON.dump obj
   end
 
   def save_game
@@ -143,11 +147,8 @@ class Game
 
   def load_game
     obj = JSON.parse(File.read('save_file.json'))
-    p obj
-    obj.keys.each do |key|
-      instance_variable_set(key, obj[key])
+    obj.each do |key, value|
+      instance_variable_set(key, value)
     end
   end
-
 end
-
