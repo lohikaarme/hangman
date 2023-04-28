@@ -3,7 +3,7 @@
 require 'pry'
 
 require_relative 'game'
-require_relative 'serial'
+# require_relative 'serial'
 
 class Main
   attr_accessor :game_obj

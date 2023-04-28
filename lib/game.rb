@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 require 'pry'
-require_relative 'serial'
+require 'json'
+# require_relative 'serial'
 
 # Hangman game logic
 class Game
-  include BasicSerializable
+  # include BasicSerializable
 
   attr_accessor :game
   attr_reader :key_word, :key_length, :guess
@@ -34,7 +35,7 @@ class Game
     # win/loss message
     guess_count(@guess, @max_guesses)
     end_game
-    binding.pry
+    # binding.pry
     # p @guess
     # p @key_word
   end
@@ -79,13 +80,7 @@ class Game
   end
 
   def key_render(key, guess)
-    viewer = key.map do |k|
-      if guess.include?(k)
-        k
-      else
-        '_'
-      end
-    end
+    viewer = key.map { |k| guess.include?(k) ? k : '_' }
     puts
     puts viewer.join(' ')
     puts "Guesses: #{guess.join(' ')}"
@@ -116,7 +111,7 @@ class Game
   end
 
   def load_check
-    return if (@turn != 0)
+    return if @turn != 0
 
     choice = ''
     choosing = true
@@ -132,9 +127,7 @@ class Game
 
   def serialize
     obj = {}
-    instance_variables.map do |var|
-      obj[var] = instance_variable_get(var)
-    end
+    instance_variables.map { |var| obj[var] = instance_variable_get(var) }
     JSON.dump obj
   end
 
@@ -147,8 +140,6 @@ class Game
 
   def load_game
     obj = JSON.parse(File.read('save_file.json'))
-    obj.each do |key, value|
-      instance_variable_set(key, value)
-    end
+    obj.each { |key, value| instance_variable_set(key, value) }
   end
 end
